@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bolly – Premium Haircare Experience</title>
+  <meta name="description" content="Discover bolly Clarity Shampoo – an interactive 3D product experience featuring advanced anti-dandruff technology." />
+
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+
+
+  <!-- ═══════════════════════════════════════════════════
+       LOADING SCREEN
+       ═══════════════════════════════════════════════════ -->
+  <div id="loading-screen">
+    <div style="position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <div class="loading-glow"></div>
+      <svg style="position:relative; z-index:10; width:96px; height:192px;" viewBox="0 0 120 220">
+        <defs>
+          <mask id="bottle-mask">
+            <rect width="100%" height="100%" fill="black" />
+            <path d="
+              M 50,25 L 70,25 A 3,3 0 0,1 73,28 L 73,36 A 3,3 0 0,1 70,39 L 50,39 A 3,3 0 0,1 47,36 L 47,28 A 3,3 0 0,1 50,25 Z
+              M 32,30 C 32,23 47,27 47,29 L 47,33 C 47,34 32,34 32,30 Z
+              M 57,39 L 63,39 L 63,65 L 57,65 Z
+              M 48,65 L 72,65 L 72,74 L 48,74 Z
+              M 72,74 C 85,77 92,86 92,98 L 92,195 C 92,206 82,210 60,210 C 38,210 28,206 28,195 L 28,98 C 28,86 35,77 48,74 Z
+            " fill="white" />
+          </mask>
+        </defs>
+        <path d="
+          M 50,25 L 70,25 A 3,3 0 0,1 73,28 L 73,36 A 3,3 0 0,1 70,39 L 50,39 A 3,3 0 0,1 47,36 L 47,28 A 3,3 0 0,1 50,25 Z
+          M 32,30 C 32,23 47,27 47,29 L 47,33 C 47,34 32,34 32,30 Z
+          M 57,39 L 63,39 L 63,65 L 57,65 Z
+          M 48,65 L 72,65 L 72,74 L 48,74 Z
+          M 72,74 C 85,77 92,86 92,98 L 92,195 C 92,206 82,210 60,210 C 38,210 28,206 28,195 L 28,98 C 28,86 35,77 48,74 Z
+        " fill="#e2e0ed" />
+        <g mask="url(#bottle-mask)">
+          <rect id="liquid-fill" x="0" y="220" width="120" height="220" fill="#5B4FA3" />
+        </g>
+      </svg>
+      <div class="loading-percent" id="percent-label">0%</div>
+      <div class="loading-label">Preparing hair science...</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       NAVIGATION
+       ═══════════════════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="nav-logo">bolly</div>
+    <div class="nav-links">
+      <a href="#hero" class="nav-link active" data-section="hero">Home</a>
+      <a href="#features" class="nav-link" data-section="features">Features</a>
+      <a href="#ingredients" class="nav-link" data-section="ingredients">Ingredients</a>
+      <a href="#benefits" class="nav-link" data-section="benefits">Benefits</a>
+      <a href="#reviews" class="nav-link" data-section="reviews">Reviews</a>
+      <a href="#contact" class="nav-link" data-section="contact" id="nav-contact">Contact</a>
+    </div>
+    <a href="#cta" class="nav-cta">Buy Now</a>
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <a href="#hero">Home</a>
+    <a href="#features">Features</a>
+    <a href="#ingredients">Ingredients</a>
+    <a href="#benefits">Benefits</a>
+    <a href="#reviews">Reviews</a>
+    <a href="#contact">Contact</a>
+    <a href="#cta">Buy Now</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       THREE.JS CONTAINER (fixed, always clickable)
+       ═══════════════════════════════════════════════════ -->
+  <div id="three-container"></div>
+
+  <!-- Shampoo Drop Overlay (Round Glossy Soap Bubble - like reference video) -->
+  <div id="shampoo-drop" style="width:0; height:0; pointer-events:none; z-index:200; position:fixed; opacity:0; transform:translate(-50%,-50%);">
+    <svg viewBox="0 0 100 100" style="width:100%; height:100%; overflow:visible; filter: drop-shadow(0px 8px 20px rgba(180,170,230,0.45));">
+      <defs>
+        <!-- Main bubble fill: creamy whitish-purple radial gradient -->
+        <radialGradient id="bubble-fill" cx="38%" cy="35%" r="65%">
+          <stop offset="0%" stop-color="#FEFEFF" stop-opacity="1" />
+          <stop offset="30%" stop-color="#F4F2FF" stop-opacity="0.98" />
+          <stop offset="65%" stop-color="#DDD8FA" stop-opacity="0.95" />
+          <stop offset="100%" stop-color="#C0B8EE" stop-opacity="0.9" />
+        </radialGradient>
+        <!-- Inner sheen overlay -->
+        <radialGradient id="bubble-sheen" cx="35%" cy="30%" r="50%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.7" />
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+        </radialGradient>
+        <!-- Bottom depth shadow -->
+        <radialGradient id="bubble-shadow" cx="50%" cy="80%" r="40%">
+          <stop offset="0%" stop-color="#9B90D8" stop-opacity="0.35" />
+          <stop offset="100%" stop-color="#9B90D8" stop-opacity="0" />
+        </radialGradient>
+      </defs>
+      <!-- Bubble body -->
+      <circle cx="50" cy="50" r="48" fill="url(#bubble-fill)" />
+      <!-- Bottom depth (gives 3D roundness) -->
+      <circle cx="50" cy="50" r="48" fill="url(#bubble-shadow)" />
+      <!-- Main specular highlight — top-left bright shine -->
+      <ellipse cx="34" cy="30" rx="14" ry="10" fill="url(#bubble-sheen)" />
+      <!-- Small crisp specular dot -->
+      <circle cx="28" cy="24" r="5" fill="rgba(255,255,255,0.92)" />
+      <!-- Thin iridescent rim -->
+      <circle cx="50" cy="50" r="47" fill="none" stroke="rgba(200,190,255,0.4)" stroke-width="1.5" />
+    </svg>
+  </div>
+
+  <!-- Foam/Lather Overlays -->
+  <div id="foam-left" class="foam-bubble-overlay"></div>
+  <div id="foam-right" class="foam-bubble-overlay"></div>
+
+  <!-- Particles -->
+  <canvas id="particles-canvas"></canvas>
+
+  <!-- SVG Connections for Ingredients -->
+  <svg id="svg-connections">
+    <path id="glowing-path" d="" stroke="#7B6FD0" stroke-width="2" fill="none" stroke-dasharray="8 4" opacity="0" />
+  </svg>
+
+  <!-- Glowing Cap Tooltip Only (Glowing ring removed as requested) -->
+  <div id="cap-tooltip">Tap the cap to discover features</div>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 1: HERO
+       ═══════════════════════════════════════════════════ -->
+  <section id="hero" class="section" style="padding-top:110px;">
+    <div class="hero-grid" style="display:grid; grid-template-columns:1fr 1.2fr 1fr; width:100%; align-items:center; gap:24px;">
+
+      <!-- Left -->
+      <div class="hero-left" style="display:flex; flex-direction:column; align-items:flex-start; gap:18px; z-index:20;">
+        <div class="hero-badge">FROM ROOT <span class="badge-pill">TO SHINE</span></div>
+        <h1 class="hero-headline" id="hero-headline">
+          <span class="stagger-word">KNOCK</span><br>
+          <span class="stagger-word" style="transition-delay:.15s">OUT</span><br>
+          <span class="stagger-word" style="transition-delay:.3s">FLAKES</span>
+        </h1>
+        <p class="hero-desc">Formulated to eliminate flakes completely and leave your scalp perfectly nourished from root to tip.</p>
+        <div class="hero-btns">
+          <a href="#features" class="btn-primary">Explore Product</a>
+          <a href="#cta" class="btn-secondary">Buy Now</a>
+        </div>
+      </div>
+
+      <!-- Center (3D bottle space) -->
+      <div style="height:420px;"></div>
+
+      <!-- Right -->
+      <div class="hero-right" style="display:flex; flex-direction:column; align-items:flex-end; text-align:right; gap:18px; z-index:20;">
+        <p class="hero-tagline">Journey into the <em>wonderful world of</em> shampoo.</p>
+        <div class="scroll-hint">
+          Scroll to Discover
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 2: FEATURE DISCOVERY (Pump Interaction)
+       ═══════════════════════════════════════════════════ -->
+  <section id="features" class="section">
+    <div class="features-container">
+      <div style="text-align:center; max-width:550px; margin:0 auto 20px;">
+        <span class="section-label">Interactive Science</span>
+        <h2 class="section-title" style="margin-bottom:8px;">Feature Discovery</h2>
+        <p class="section-desc" style="margin:0 auto;" id="pump-label">Discover the premium features of our active formulation.</p>
+      </div>
+
+      <!-- Grid for dynamic feature rows -->
+      <div id="feature-rows-container" style="display:flex; flex-direction:column; gap:24px; width:100%;">
+        <!-- Dynamic rows will be inserted here by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 3: WHY CHOOSE
+       ═══════════════════════════════════════════════════ -->
+  <section id="why-choose" class="section">
+    <div style="max-width:1100px; width:100%; margin:0 auto;">
+      <div style="text-align:center; max-width:520px; margin:0 auto 48px;">
+        <span class="section-label">Advanced Benefits</span>
+        <h2 class="section-title">Why Choose This Shampoo?</h2>
+        <p class="section-desc" style="margin:8px auto 0;">Specially crafted with natural oils and scientifically backed active ingredients.</p>
+      </div>
+
+      <div class="why-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:20px;">
+        <div class="why-card glass-card">
+          <div class="why-icon">✓</div>
+          <h3 class="why-title">Reduces Dandruff</h3>
+          <p class="why-desc">Fights oil buildup and fungi to keep flakes away.</p>
+        </div>
+        <div class="why-card glass-card">
+          <div class="why-icon">✓</div>
+          <h3 class="why-title">Controls Hair Fall</h3>
+          <p class="why-desc">Strengthens roots by optimizing scalp circulation.</p>
+        </div>
+        <div class="why-card glass-card">
+          <div class="why-icon">✓</div>
+          <h3 class="why-title">Repairs Scalp</h3>
+          <p class="why-desc">Calms irritation and dryness with soothing extracts.</p>
+        </div>
+        <div class="why-card glass-card">
+          <div class="why-icon">✓</div>
+          <h3 class="why-title">Deep Nourishment</h3>
+          <p class="why-desc">Locks in proteins for healthy, silky-smooth hair.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 4: INGREDIENTS (Floating Bubbles)
+       ═══════════════════════════════════════════════════ -->
+  <section id="ingredients" class="section" style="min-height:120vh; padding:0;">
+    <div class="sticky-wrap">
+      <div style="position:absolute; top:48px; text-align:center; max-width:480px; padding:0 16px; z-index:20;">
+        <span class="section-label">Interactive Ingredients</span>
+        <h2 class="section-title" style="font-size:clamp(28px,4vw,42px);">Active Ingredients</h2>
+        <p class="section-desc" style="margin:4px auto 0;">Scroll slowly to discover the organic compounds in the formula.</p>
+      </div>
+      <div id="bubbles-container" style="position:relative; width:100%; height:100%; max-width:1100px; display:flex; align-items:center; justify-content:center; pointer-events:auto;"></div>
+      <!-- Dedicated Glass Card for Active Ingredient Details (eliminates flicker, high-end design layout) -->
+      <div id="ingredient-detail-card" class="glass-card" style="position:absolute; right:8%; width:340px; padding:32px; border-radius:24px; opacity:0; transform:translateX(30px); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); z-index:20; display:flex; flex-direction:column; gap:16px; pointer-events:auto; text-align:left;">
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 5: BENEFITS (Circular Progress)
+       ═══════════════════════════════════════════════════ -->
+  <section id="benefits" class="section">
+    <div style="max-width:1100px; width:100%; margin:0 auto;">
+      <div style="text-align:center; max-width:520px; margin:0 auto 56px;">
+        <span class="section-label">Proven Performance</span>
+        <h2 class="section-title">Clinical Benefits</h2>
+        <p class="section-desc" style="margin:8px auto 0;">Tested in independent scalp health studies over 6 weeks.</p>
+      </div>
+
+      <div class="benefits-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:40px; text-align:center; justify-items:center;">
+        <!-- 95% -->
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div class="benefit-ring">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" stroke="#f1effb" stroke-width="8" fill="transparent" />
+              <circle cx="50" cy="50" r="40" stroke="#5B4FA3" stroke-width="8" fill="transparent"
+                      stroke-dasharray="251.2" stroke-dashoffset="251.2" class="progress-circle" data-percent="95" />
+            </svg>
+            <span class="benefit-pct">0%</span>
+          </div>
+          <div class="benefit-title">Dandruff Reduction</div>
+          <p class="benefit-desc">Clear, flake-free scalps within two weeks.</p>
+        </div>
+        <!-- 88% -->
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div class="benefit-ring">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" stroke="#f1effb" stroke-width="8" fill="transparent" />
+              <circle cx="50" cy="50" r="40" stroke="#5B4FA3" stroke-width="8" fill="transparent"
+                      stroke-dasharray="251.2" stroke-dashoffset="251.2" class="progress-circle" data-percent="88" />
+            </svg>
+            <span class="benefit-pct">0%</span>
+          </div>
+          <div class="benefit-title">Scalp Hydration</div>
+          <p class="benefit-desc">Restores moisture balance to dry skin cells.</p>
+        </div>
+        <!-- 93% -->
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div class="benefit-ring">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" stroke="#f1effb" stroke-width="8" fill="transparent" />
+              <circle cx="50" cy="50" r="40" stroke="#5B4FA3" stroke-width="8" fill="transparent"
+                      stroke-dasharray="251.2" stroke-dashoffset="251.2" class="progress-circle" data-percent="93" />
+            </svg>
+            <span class="benefit-pct">0%</span>
+          </div>
+          <div class="benefit-title">Itch Control</div>
+          <p class="benefit-desc">Immediate relief from scalp irritation.</p>
+        </div>
+        <!-- 90% -->
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div class="benefit-ring">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" stroke="#f1effb" stroke-width="8" fill="transparent" />
+              <circle cx="50" cy="50" r="40" stroke="#5B4FA3" stroke-width="8" fill="transparent"
+                      stroke-dasharray="251.2" stroke-dashoffset="251.2" class="progress-circle" data-percent="90" />
+            </svg>
+            <span class="benefit-pct">0%</span>
+          </div>
+          <div class="benefit-title">Hair Volume Boost</div>
+          <p class="benefit-desc">Nourishes follicles to prevent split ends.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 6: USAGE GUIDE (Timeline)
+       ═══════════════════════════════════════════════════ -->
+  <section id="usage" class="section">
+    <div style="max-width:640px; width:100%; margin:0 auto;">
+      <div style="text-align:center; margin-bottom:48px;">
+        <span class="section-label">Step-by-Step</span>
+        <h2 class="section-title">How to Use</h2>
+        <p class="section-desc" style="margin:8px auto 0;">Follow our recommended routine for best results.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-line"><div class="timeline-line-fill" id="timeline-fill" style="height:0%"></div></div>
+
+        <div class="timeline-step">
+          <div class="timeline-dot">1</div>
+          <h3 class="step-title">Wet Hair Thoroughly</h3>
+          <p class="step-desc">Use lukewarm water to completely soak your strands, opening hair cuticles for absorption.</p>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot">2</div>
+          <h3 class="step-title">Apply & Lather</h3>
+          <p class="step-desc">Dispense a coin-sized amount into your palm and work into a rich lather on roots.</p>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot">3</div>
+          <h3 class="step-title">Massage the Scalp</h3>
+          <p class="step-desc">Gently massage in circular motions for 2–3 minutes to stimulate circulation.</p>
+        </div>
+        <div class="timeline-step">
+          <div class="timeline-dot">4</div>
+          <h3 class="step-title">Rinse Off Completely</h3>
+          <p class="step-desc">Wash out with cold water to lock in moisture and close follicles for natural shine.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 7: CUSTOMER REVIEWS (Marquee)
+       ═══════════════════════════════════════════════════ -->
+  <section id="reviews" class="section" style="flex-direction:column; align-items:stretch;">
+    <div style="max-width:1100px; width:100%; margin:0 auto 32px; padding:0 16px;">
+      <span class="section-label">Real Experiences</span>
+      <h2 class="section-title">What Users Say</h2>
+      <p class="section-desc">Thousands have experienced healthier scalps with bolly.</p>
+    </div>
+    <div class="marquee-container">
+      <div class="marquee-track" id="reviews-track"></div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════
+       SECTION 8: FINAL CTA
+       ═══════════════════════════════════════════════════ -->
+  <section id="cta" class="section" style="flex-direction:column; text-align:center; gap:28px;">
+    <span class="section-label">Get Started Today</span>
+    <h2 style="font-size:clamp(40px,6vw,72px); font-weight:900; color:#111; letter-spacing:-2px; line-height:.95; text-transform:uppercase;">
+      Ready to Knock<br>Out Flakes?
+    </h2>
+    <p class="section-desc" style="max-width:440px; margin:0 auto;">Join the revolution of healthy, natural hair care. Free shipping on all domestic orders.</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
+      <a href="#" class="btn-primary">Order bolly Now</a>
+      <button class="btn-secondary" id="faq-btn" style="cursor:pointer;">Ask FAQ</button>
+    </div>
+  </section>
+
+  <!-- FAQ Modal Dialog Overlay -->
+  <div id="faq-modal" class="modal-overlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:10000; align-items:center; justify-content:center; backdrop-filter:blur(8px); opacity:0; transition:opacity 0.4s ease; pointer-events:auto;">
+    <div class="modal-content glass-card" style="width:90%; max-width:540px; padding:32px; border-radius:20px; position:relative; transform:scale(0.9); transition:transform 0.4s ease; background:rgba(255,255,255,0.92); border:1px solid rgba(91,79,163,0.15); box-shadow:0 20px 50px rgba(91,79,163,0.15);">
+      <button id="faq-close-btn" style="position:absolute; top:20px; right:20px; background:none; border:none; font-size:24px; cursor:pointer; color:#777; transition:color 0.2s;">&times;</button>
+      <h3 style="font-size:22px; font-weight:800; color:#5B4FA3; margin-bottom:20px; text-transform:uppercase; letter-spacing:-0.5px; text-align:left;">Frequently Asked Questions</h3>
+      <div style="display:flex; flex-direction:column; gap:16px; text-align:left;">
+        <div>
+          <h4 style="font-weight:700; color:#222; font-size:14px; margin-bottom:4px;">Q: Is bolly shampoo safe for color-treated hair?</h4>
+          <p style="color:#666; font-size:13px; line-height:1.5;">A: Yes, bolly is 100% sulfate-free, paraben-free, and safe for all hair types including color-treated, chemically-treated, and sensitive scalps.</p>
+        </div>
+        <div style="border-top:1px solid rgba(0,0,0,0.06); padding-top:12px;">
+          <h4 style="font-weight:700; color:#222; font-size:14px; margin-bottom:4px;">Q: How soon can I expect results for dandruff?</h4>
+          <p style="color:#666; font-size:13px; line-height:1.5;">A: Most users report a noticeable reduction in flakes and scalp irritation within the first 2-3 washes, with optimal scalp renewal in 2 weeks.</p>
+        </div>
+        <div style="border-top:1px solid rgba(0,0,0,0.06); padding-top:12px;">
+          <h4 style="font-weight:700; color:#222; font-size:14px; margin-bottom:4px;">Q: What makes the formula active?</h4>
+          <p style="color:#666; font-size:13px; line-height:1.5;">A: We combine active organic Tea Tree Oil and Neem extract with nourishing Vitamin E and Biotin to naturally target dandruff while rebuilding your scalp barrier.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════
+       FOOTER (id="contact" for Contact nav scroll)
+       ═══════════════════════════════════════════════════ -->
+  <footer id="contact" style="background:#f1f3f6; padding:32px 24px; text-align:center; border-top:1px solid rgba(0,0,0,0.04); width:100%; z-index:20; position:relative; pointer-events:auto;">
+    <div style="max-width:1100px; margin:0 auto; display:flex; flex-direction:column; align-items:center; gap:20px;">
+      
+      <!-- Social Media -->
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap; justify-content:center;">
+        <span style="font-size:14px; font-weight:700; color:#111;">Let's get social</span>
+        <div style="display:flex; gap:16px; align-items:center;">
+          <!-- Facebook -->
+          <a href="#" style="color:#111; transition:color 0.2s;" class="footer-social-link">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8H7v3h2v9h4v-9h3.6l.4-3H13V6c0-.5.5-1 1-1h3V1H13c-3 0-5 2-5 5v2z"/></svg>
+          </a>
+          <!-- X (Twitter) -->
+          <a href="#" style="color:#111; transition:color 0.2s;" class="footer-social-link">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.2 2.4h3.3L14.3 11l8.5 11.3H16L11 15.8l-6 6.5H1.6l7.8-9L1.3 2.4h6.9l4.4 5.8 5.6-5.8zm-1.2 17.6h1.8L7.1 4.5H5.1l11.9 15.5z"/></svg>
+          </a>
+          <!-- Instagram -->
+          <a href="#" style="color:#111; transition:color 0.2s;" class="footer-social-link">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.1c3.2 0 3.6 0 4.9.1 1.2.1 1.8.3 2.2.5.6.2 1 .5 1.4 1 .5.4.8.8 1 1.4.2.4.4 1 .5 2.2.1 1.3.1 1.6.1 4.9s0 3.6-.1 4.9c-.1 1.2-.3 1.8-.5 2.2-.2.6-.5 1-1 1.4-.4.5-.8.8-1.4 1-.4.2-1 .4-2.2.5-1.3.1-1.6.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-1.8-.3-2.2-.5-.6-.2-1-.5-1.4-1-.5-.4-.8-.8-1-.1.4-.2.4-1-.5-2.2-.1-1.3-.1-1.6-.1-4.9s0-3.6.1-4.9c.1-1.2.3-1.8.5-2.2.2-.6.5-1 1-1.4.4-.5.8-.8 1.4-1 .4-.2 1-.4 2.2-.5 1.3-.1 1.6-.1 4.9-.1M12 0C8.7 0 8.3 0 7 0 5.7.1 4.8.3 4 .6c-.8.3-1.5.7-2.1 1.4C1.2 2.6.8 3.3.5 4.1.2 4.9.1 5.8 0 7c0 1.3 0 1.7 0 5s0 3.7.1 5c.1 1.2.3 2.1.6 2.9.3.8.7 1.5 1.4 2.1.6.6 1.3 1 2.1 1.3.8.3 1.7.4 2.9.4 1.3 0 1.7 0 5 0s3.7 0 5-.1c1.2-.1 2.1-.3 2.9-.6.8-.3 1.5-.7 2.1-1.4.6-.6 1-1.3 1.3-2.1.3-.8.4-1.7.4-2.9.1-1.3.1-1.7.1-5s0-3.7-.1-5c-.1-1.2-.3-2.1-.6-2.9-.3-.8-.7-1.5-1.4-2.1-.6-.6-1.3-1-2.1-1.3-.8-.3-1.7-.4-2.9-.4-1.3 0-1.7 0-5 0z"/><path d="M12 5.8c-3.4 0-6.2 2.8-6.2 6.2s2.8 6.2 6.2 6.2 6.2-2.8 6.2-6.2-2.8-6.2-6.2-6.2zm0 10.3c-2.3 0-4.1-1.8-4.1-4.1S9.7 7.9 12 7.9s4.1 1.8 4.1 4.1-1.8 4.1-4.1 4.1zm6.4-11c0 .8-.7 1.5-1.5 1.5s-1.5-.7-1.5-1.5.7-1.5 1.5-1.5 1.5.7 1.5 1.5z"/></svg>
+          </a>
+          <!-- YouTube -->
+          <a href="#" style="color:#111; transition:color 0.2s;" class="footer-social-link">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M23.5 6.2c-.3-1-1-1.7-2-2C19.7 3.8 12 3.8 12 3.8s-7.7 0-9.5.4c-1 .3-1.7 1-2 2C.1 8 0 12 0 12s.1 4 .5 5.8c.3 1 1 1.7 2 2 1.8.4 9.5.4 9.5.4s7.7 0 9.5-.4c1-.3 1.7-1 2-2 .4-1.8.5-5.8.5-5.8s-.1-4-.5-5.8zM9.5 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="#" style="color:#111; transition:color 0.2s;" class="footer-social-link">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Legal Links -->
+      <div style="font-size:12px; color:#555; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; align-items:center;">
+        <a href="#" style="color:#555; text-decoration:none;" class="footer-legal-link">Privacy Policy</a>
+        <span>•</span>
+        <a href="#" style="color:#555; text-decoration:none;" class="footer-legal-link">Terms of Use</a>
+        <span>•</span>
+        <a href="#" style="color:#555; text-decoration:none;" class="footer-legal-link">Warranty Policy</a>
+        <span>•</span>
+        <a href="#" style="color:#555; text-decoration:none;" class="footer-legal-link">D2D Paid Repair Service Policy</a>
+      </div>
+
+      <!-- Copyright -->
+      <div style="font-size:11px; color:#888;">
+        &copy; 2026 Imagine Marketing Limited. All Rights Reserved.
+      </div>
+      
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════
+       SCRIPTS (order matters)
+       ═══════════════════════════════════════════════════ -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="js/sounds.js"></script>
+  <script src="js/three-scene.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
